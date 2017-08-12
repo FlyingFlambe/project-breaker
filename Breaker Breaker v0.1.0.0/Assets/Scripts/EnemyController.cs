@@ -4,15 +4,7 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour {
 
-    // Initialize //
-    public GameObject[] BorderParent;
-    Rigidbody2D enemy;
-    BulletController bullet;
-    PlayerController player;
-    ExplosionController explosion;
-    ScreenshakeController screenshake;
-    AltimeterController altimeter;
-
+    // Public variables
     // Animation //
     public Animator anim;
     public bool isHurt;
@@ -31,6 +23,15 @@ public class EnemyController : MonoBehaviour {
     public float health;
     public float contactDamage;
     public float explosionDamage;
+
+    // Private Variables
+    public GameObject[] BorderParent;
+    Rigidbody2D enemy;
+    BulletController bullet;
+    PlayerController player;
+    ExplosionController explosion;
+    ScreenshakeController screenshake;
+    AltimeterController altimeter;
 
     void Start()
     {

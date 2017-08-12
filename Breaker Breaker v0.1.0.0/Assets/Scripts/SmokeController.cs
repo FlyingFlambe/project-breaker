@@ -4,16 +4,13 @@ using UnityEngine;
 
 public class SmokeController : MonoBehaviour {
 
-    // Initializing //
-    PlayerController player;
-
-    public Transform smokeExit;
+    // Public variables 
     public Transform smokePuff;
-    
-    // Variables //
     public float timeBetweenPuffs;          // How much time should pass in between smoke puffs.
-    float puffCounter;                      // Keeps track of how much time has passed since last smoke puff.
 
+    // Private variables
+    PlayerController player;
+    float puffCounter;                      // Keeps track of how much time has passed since last smoke puff.
 
     void Start()
     {
