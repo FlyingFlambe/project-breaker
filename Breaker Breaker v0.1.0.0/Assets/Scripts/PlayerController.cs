@@ -5,26 +5,13 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
 
-    /// Initialized Variables ///
-    Rigidbody2D player;
-    GunController gun;
-    ExplosionController explosion;
-    ScreenshakeController screenshake;
-    AltimeterController altitude;
-
+    // Public variables
+    public static PlayerController instance = null;
     public AudioSource engineRev;
     public AudioSource engineExplode;
     public AudioSource engineMash;
     public AudioSource healUp;
     public AudioSource wallCollide;
-
-    [SerializeField]
-    CanvasGroup gameOver;
-    [SerializeField]
-    CanvasGroup pressRToRestart;
-    [SerializeField]
-    CanvasGroup stageSuccess;
-
     public bool isThrusting;
     public bool isSmoking;
 
@@ -44,6 +31,18 @@ public class PlayerController : MonoBehaviour {
     public Stat health;                     // Airplane's current health.
     public int wallCollisionDamage;
 
+    // Private variables
+    Rigidbody2D player;
+    GunController gun;
+    ExplosionController explosion;
+    ScreenshakeController screenshake;
+    AltimeterController altitude;
+    GameObject gameOver;
+
+    // Serialized variables
+    [SerializeField]
+    CanvasGroup stageSuccess;
+    
     /// Set Airplane Angle ///
     Vector3 mousePos;
     Vector3 planeToMouseDir;
@@ -55,6 +54,12 @@ public class PlayerController : MonoBehaviour {
 
     void Awake()
     {
+        // ensures that PlayerController is a singleton
+        if (instance == null)
+            instance = this;
+        else if (instance != null)
+            Destroy(gameObject);
+
         // Initialize Stats
         durability.Initialize();
         health.Initialize();
@@ -74,8 +79,6 @@ public class PlayerController : MonoBehaviour {
         healUp = GetComponentInChildren<AudioSource>();
         wallCollide = GetComponentInChildren<AudioSource>();
 
-        gameOver.GetComponent<CanvasGroup>().alpha = 0.0f;
-        pressRToRestart.GetComponent<CanvasGroup>().alpha = 0.0f;
         stageSuccess.GetComponent<CanvasGroup>().alpha = 0.0f;
 
         isBroken = false;
@@ -220,15 +223,15 @@ public class PlayerController : MonoBehaviour {
         screenshake.shakeDuration = 0.5f;
         Destroy(gameObject);
         explosion.Animate();
-        gameOver.GetComponent<CanvasGroup>().alpha = 1.0f;
-        pressRToRestart.GetComponent<CanvasGroup>().alpha = 1.0f;
+        gameOver = GameObject.Find("GameOverScreen");
+        CanvasGroup UI = gameOver.GetComponent<CanvasGroup>();
+        UI.alpha = 1;
     }
 
     void WinGame()
     {
         health.CurrentVal = health.MaxVal;
         stageSuccess.GetComponent<CanvasGroup>().alpha = 1.0f;
-        pressRToRestart.GetComponent<CanvasGroup>().alpha = 1.0f;
         Destroy(FindObjectOfType<EnemySpawnController>().gameObject);
         Destroy(FindObjectOfType<EnemyController>().gameObject);
     }
